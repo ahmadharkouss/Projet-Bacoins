@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class CursorDetection : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class CursorDetection : MonoBehaviour {
     private PointerEventData pointerEventData = new PointerEventData(null);
 
     public Transform currentCharacter;
+    public GameObject Ready;
 
     public Transform token;
     public bool hasToken;
@@ -32,6 +34,12 @@ public class CursorDetection : MonoBehaviour {
             {
                 TokenFollow(false);
                 SmashCSS.instance.ConfirmCharacter(0, SmashCSS.instance.characters[currentCharacter.GetSiblingIndex()]);
+                Ready.SetActive(true);
+            }
+
+            if(!hasToken)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
         }
 
@@ -40,8 +48,9 @@ public class CursorDetection : MonoBehaviour {
         {
             SmashCSS.instance.confirmedCharacter = null;
             TokenFollow(true);
+            Ready.SetActive(false);
         }
-
+        
         if (hasToken)
         {
             token.position = transform.position;
