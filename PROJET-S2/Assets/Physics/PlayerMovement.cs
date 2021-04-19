@@ -35,6 +35,8 @@ public abstract class PlayerMovement : NetworkBehaviour
     
     protected Rigidbody _rb;
 
+    protected Animator _an;
+
     protected bool _invincible = false;
     
     protected bool _intangible = false;
@@ -62,6 +64,7 @@ public abstract class PlayerMovement : NetworkBehaviour
     {
         _pm = GetComponent<BoxCollider>().material;
         _rb = GetComponent<Rigidbody>();
+        _an = GetComponent<Animator>();
         transform.localScale = new Vector3(size * gameObject.transform.localScale.x, size * gameObject.transform.localScale.y, size * gameObject.transform.localScale.z);
     }
 
@@ -199,6 +202,7 @@ public abstract class PlayerMovement : NetworkBehaviour
             //detect if player isn't moving
             if (Input.GetKey(KeyCode.D) == false && Input.GetKey(KeyCode.Q) == false)
             {
+                _an.SetBool("isrunning", false);
                 _isRunning = false;
                 changeVelocity(_rb.velocity.x / (float) 1.01, _rb.velocity.y);
             }
@@ -206,23 +210,27 @@ public abstract class PlayerMovement : NetworkBehaviour
             //detect if player is running to the left
             if (_isRunning && Math.Abs(_rb.velocity.x) < _maxSpeed && Input.GetKey(KeyCode.D))
             {
+                _an.SetBool("isrunning", true);
                 changeVelocity(_rb.velocity.x + _acceleration, _rb.velocity.y);
             }
 
             //detect if player is running to the right
             if (_isRunning && Math.Abs(_rb.velocity.x) < _maxSpeed && Input.GetKey(KeyCode.Q))
             {
+                _an.SetBool("isrunning", true);
                 changeVelocity(_rb.velocity.x - _acceleration, _rb.velocity.y);
             }
 
             //detect if player start moving to the left
             if (Input.GetKeyDown(KeyCode.D) && _isOnGround && _crouch == false)
             {
+                _an.SetBool("isrunning", true);
                 changeVelocity(initialDash, _rb.velocity.y);
             }
 
             if (Input.GetKeyDown(KeyCode.Q) && _isOnGround && _crouch == false)
             {
+                _an.SetBool("isrunning", true);
                 changeVelocity(-initialDash, _rb.velocity.y);
             }
 
