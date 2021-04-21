@@ -79,7 +79,7 @@ namespace Player
 
         public override void meleeAttack()
         {
-            throw new NotImplementedException();
+            FindObjectOfType<AudioManager>().Play("test coup de poing");
         }
 
         public override void rangeAttack()
